@@ -5,7 +5,7 @@ const PORT = 4000;
 
 const handleListening = () => console.log(`Listening on: http://localhost:${PORT}`);
 
-const handleHome = (req, res) => res.send("Hell from hohohome!");
+const handleHome = (req, res) => res.send("Test normal operation by changing the project folder to Linux");
 
 const handleProfile = (req, res) => res.send("You are on my profile!!");
 
