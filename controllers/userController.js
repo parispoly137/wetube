@@ -33,12 +33,10 @@ export const postJoin = async (req, res, next) => {
 // Log in
 export const getLogin = (req, res) => res.render("login", { pageTitle: "Log in" });
 
-export const postLogin = (req, res) => {
-  passport.authenticate('local', {
-    failureRedirect: routes.login,
-    successRedirect: routes.home
-  });     // local: 우리가 설치한 strategy 이름
-};
+export const postLogin = passport.authenticate('local', {
+  failureRedirect: routes.login,
+  successRedirect: routes.home
+});
 
 // Log out
 export const logout = (req, res) => {
