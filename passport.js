@@ -1,19 +1,21 @@
+import dotenv from "dotenv";
 import passport from "passport";
-import GithubStrategy from "passport-github";  // 1) import
+import GithubStrategy from "passport-github";
 import User from "./models/User";
 import { githubLoginCallback } from "./controllers/userController";
+import routes from "./routes";
+
+dotenv.config();
+
+console.log(process.env.GH_SECRET);
 
 passport.use(User.createStrategy());
 
-passport.use(new GithubStrategy({   // 2)새로운 Strategy를 만든다.
+passport.use(new GithubStrategy({
   clientID: process.env.GH_ID,
   clientSecret: process.env.GH_SECRET,
-  callbackURL: "http://localhost:4000/auth/github/callback"
-}), githubLoginCallback);  // 4) 콜백 함수 추가
-
-// 3) 함수 선언 ... 사용자가 깃헙에서 돌아왔을 때 실행되는 함수 -> userController에서 
-
-// 5) 함수 선언 ... 깃헙으로 보내는 함수 -> userController에서 
+  callbackURL: `http://localhost:4000${routes.githubCallback}`
+}, githubLoginCallback));
 
 
 passport.serializeUser(User.serializeUser());

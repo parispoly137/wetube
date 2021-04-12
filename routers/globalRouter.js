@@ -1,8 +1,9 @@
 import express from "express";
-import { getJoin, postJoin, getLogin, postLogin, logout } from "../controllers/userController";
+import passport from "passport";
+import { getJoin, postJoin, getLogin, postLogin, logout, githubLogin, postGithubLogin } from "../controllers/userController";
 import { home, search } from "../controllers/videoController";
 import routes from "../routes";
-import { onlyPublic } from "../middlewares";
+import { onlyPublic, onlyPrivate } from "../middlewares";
 
 const globalRouter = express.Router();
 
@@ -21,7 +22,16 @@ globalRouter.get(routes.home, home);
 globalRouter.get(routes.search, search);
 
 // Log out
-globalRouter.get(routes.logout, onlyPublic, logout);
+globalRouter.get(routes.logout, onlyPrivate, logout);
 
+// Github
+
+globalRouter.get(routes.gitHub, githubLogin);
+
+// 사용자를 인증 페이지에 보냄
+
+globalRouter.get(routes.githubCallback, passport.authenticate('github', { failureRedirect: '/login' }), postGithubLogin);
+
+// 사용자 인증이 잘 되어서 정보도 전달받을 때 
 
 export default globalRouter;
