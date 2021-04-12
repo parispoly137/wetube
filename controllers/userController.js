@@ -25,9 +25,7 @@ export const postJoin = async (req, res, next) => {
       console.log(error);
       res.redirect(routes.home);
     }
-    // To Do: Log user in
   }
-
 };
 
 // Log in
@@ -67,22 +65,19 @@ export const postGithubLogin = (req, res) => {
   res.redirect(routes.home);
 };
 
-
 // Log out
 export const logout = (req, res) => {
   req.logout();
   res.redirect(routes.home);
-
 };
 
 // User Detail
-
 export const getMe = (req, res) => {
   res.render("userDetail", { pageTitle: "User Detail", user: req.user });
 };
 
 export const userDetail = async (req, res) => {
-  const { params: { id } } = req;   // routes.js에 userDetail 주소에 :id 가 있으므로 사용 가능
+  const { params: { id } } = req;
   try {
     const user = await User.findById(id);
     res.render("userDetail", { pageTitle: "User Detail", user });
@@ -97,7 +92,6 @@ export const getEditProfile = (req, res) => {
 };
 
 export const postEditProfile = async (req, res) => {
-
   const {
     user: { _id: id },
     body: { name, email },
@@ -112,9 +106,28 @@ export const postEditProfile = async (req, res) => {
     });
     res.redirect(routes.me);
   } catch (error) {
-    res.render("editProfile", { pageTitle: "Edit Profile" });
+    res.render(routes.editProfile);
   }
 };
 
 // Change Password
-export const changePassword = (req, res) => res.render("changePassword", { pageTitle: "Change Password" });
+export const getChangePassword = (req, res) =>
+  res.render("changePassword", { pageTitle: "Change Password" });
+
+export const postChangePassword = async (req, res) => {
+  const {
+    body: { oldPassword, newPassword, newPassword1 }
+  } = req;
+  try {
+    if (newPassword !== newPassword1) {
+      res.status(400);
+      res.redirect(`/users/${routes.changePassword}`);
+      return;
+    }
+    await req.user.changePassword(oldPassword, newPassword);
+    res.redirect(routes.me);
+  } catch (error) {
+    res.status(400);
+    res.redirect(`/users/${routes.changePassword}`);
+  }
+};
