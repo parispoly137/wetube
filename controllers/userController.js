@@ -81,7 +81,15 @@ export const getMe = (req, res) => {
   res.render("userDetail", { pageTitle: "User Detail", user: req.user });
 };
 
-export const userDetail = (req, res) => res.render("userDetail", { pageTitle: "User Detail" });
+export const userDetail = async (req, res) => {
+  const { params: { id } } = req;   // routes.js에 userDetail 주소에 :id 가 있으므로 사용 가능
+  try {
+    const user = await User.findById(id);
+    res.render("userDetail", { pageTitle: "User Detail", user });
+  } catch (error) {
+    res.redirect(routes.home);
+  }
+};
 
 // Edit Profile
 export const editProfile = (req, res) => res.render("editProfile", { pageTitle: "Edit Profile" });
