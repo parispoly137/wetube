@@ -40,19 +40,19 @@ export const githubLogin = passport.authenticate("github");
 
 export const githubLoginCallback = async (_, __, profile, cb) => {
   const {
-    _json: { id, avatar_url: avatarUrl, name, email }
+    _json: { id: githubId, avatar_url: avatarUrl, name, email }
   } = profile;
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ githubId });
     if (user) {
-      user.githubId = id;
+      user.githubId = githubId;
       user.save();
       return cb(null, user);
     }
     const newUser = await User.create({
       email,
       name,
-      githubId: id,
+      githubId,
       avatarUrl
     });
     return cb(null, newUser);
@@ -97,12 +97,11 @@ export const postEditProfile = async (req, res) => {
     body: { name, email },
     file
   } = req;
-  console.log(req.user.avatarUrl);
   try {
     await User.findByIdAndUpdate(id, {
       name,
       email,
-      avatarUrl: file ? file.path : req.user.avatarUrl
+      avatarUrl: file ? `/${file.path}` : req.user.avatarUrl
     });
     res.redirect(routes.me);
   } catch (error) {

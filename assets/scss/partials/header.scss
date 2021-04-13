@@ -20,6 +20,9 @@
       }
       &:last-child {
         justify-self: end;
+        a {
+          color: #fff;
+        }
       }
       ul {
         display: flex;
