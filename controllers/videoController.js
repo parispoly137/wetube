@@ -16,6 +16,7 @@ export const home = async (req, res) => {
 export const search = async (req, res) => {
   const { query: { term: searchingBy } } = req;
   let videos = [];
+
   try {
     videos = await Video.find({ title: { $regex: searchingBy, $options: "i" } });
   } catch (error) {
@@ -60,14 +61,20 @@ export const videoDetail = async (req, res) => {
 // Edit Video
 export const getEditVideo = async (req, res) => {
   const {
-    params: { id }
+    params: { id },
+    user: { _id: userId }
   } = req;
   try {
     const video = await Video.findById(id);
-    res.render("editVideo", { pageTitle: `Edit ${video.title}`, video });
+    if (JSON.stringify(video.creator) !== JSON.stringify(userId)) {
+      throw Error();
+    } else {
+      res.render("editVideo", { pageTitle: `Edit ${video.title}`, video });
+    }
   } catch (error) {
-    res.redirect(routes.home);
+    console.log(error);
   }
+  res.redirect(routes.home);
 };
 
 export const postEditVideo = async (req, res) => {
@@ -87,10 +94,16 @@ export const postEditVideo = async (req, res) => {
 // Delete Video
 export const deleteVideo = async (req, res) => {
   const {
-    params: { id }
+    params: { id },
+    user: { _id: userId }
   } = req;
   try {
-    await Video.findOneAndRemove({ _id: id });
+    const video = await Video.findById(id);
+    if (JSON.stringify(video.creator) !== JSON.stringify(userId)) {
+      throw Error();
+    } else {
+      await Video.findOneAndRemove({ _id: id });
+    }
   } catch (error) {
     console.log(error);
   }
