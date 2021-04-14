@@ -115,14 +115,14 @@ export const deleteVideo = async (req, res) => {
 export const postRegisterView = async (req, res) => {
   const {
     params: { id }
-  } = req;                // url의 ID를 가져옴
+  } = req;
   try {
-    const video = await Video.findById(id);   // ID로 video를 찾음
-    video.views += 1;         // 해당 video의 조회수 1 증가
-    video.save();             // 바뀐 변수를 다시 저장
-    res.status(200);          // 정상임을 알리는 코드
+    const video = await Video.findById(id);
+    video.views += 1;
+    video.save();
+    res.status(200);
   } catch (error) {
-    res.status(400);          // 비정상임을 알리는 코드
+    res.status(400);
   } finally {
     res.end();
   }

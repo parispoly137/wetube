@@ -30,7 +30,7 @@ const GITHUB_CALLBACK = "/auth/github/callback";
 // API
 
 const API = "/api";
-const REGISTER_VIEW = "/:id/view";       //  ex) api/12/view 로 이동하면 조회수 1 증가.  어떠한 것도 렌더링하지 않는다!
+const REGISTER_VIEW = "/:id/view";
 
 const routes = {
   home: HOME,
