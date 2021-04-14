@@ -26,6 +26,12 @@ const DELETE_VIDEO = "/:id/delete";
 const GITHUB = "/auth/github";
 const GITHUB_CALLBACK = "/auth/github/callback";
 
+
+// API
+
+const API = "/api";
+const REGISTER_VIEW = "/:id/view";       //  ex) api/12/view 로 이동하면 조회수 1 증가.  어떠한 것도 렌더링하지 않는다!
+
 const routes = {
   home: HOME,
   join: JOIN,
@@ -67,7 +73,9 @@ const routes = {
   },
   gitHub: GITHUB,
   githubCallback: GITHUB_CALLBACK,
-  me: ME
+  me: ME,
+  api: API,
+  registerView: REGISTER_VIEW
 };
 
 export default routes;
