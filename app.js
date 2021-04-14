@@ -20,7 +20,7 @@ const app = express();
 app.use(helmet({
   contentSecurityPolicy: false,
 }));
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
   res.setHeader("Content-Security-Policy", "script-src 'self' https://archive.org");
   return next();
 });
